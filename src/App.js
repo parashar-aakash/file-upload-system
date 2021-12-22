@@ -23,7 +23,6 @@ function App() {
       // using this validation of 5lack row can be applied from here
       const text = await file.text();
       const result = parse(text, { header: true });
-      console.log('event', result);
     })
 
   }
