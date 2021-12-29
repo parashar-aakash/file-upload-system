@@ -12,22 +12,27 @@ function App() {
     
     Array.from(event.target.files)
     .filter((file) => file.type === "text/csv")
-    .forEach((file) => { console.log('file', file)});
+    .forEach((file) => { console.log('fileddddddd')});
     
     setDate( event.target.files[0].lastModifiedDate )
-    
+    const arrayOfSomething = [];
     const arrayOfFilesUploaded = Object.values(event.target.files);
     const arrayOfCsvFiles = arrayOfFilesUploaded.filter( ( file ) => file.type === 'text/csv')
     arrayOfCsvFiles.forEach(async (file) => {
+
+      const { name } = file;
+      console.log('fileddddddd', file, name)
 
       // converted the csv file into object containing data -> array of objects containing data row wise.
       // using this validation of 5lack row can be applied from here
       const text = await file.text();
       const result = parse(text, { header: true });
+      console.log('resultT', result.data );
+      result.data.forEach( ( data ) => { arrayOfSomething.push( { ...data, filename: name } ); })
+      console.log( 'arrayOfSomething', arrayOfSomething );
+      setFile(arrayOfSomething);
       // console.log('result', JSON.stringify({ title: result }));
-      
     })
-    setFile(arrayOfCsvFiles);
     
     const requestOptions = {
       method: 'POST',
@@ -48,7 +53,7 @@ function App() {
         }
         
    onsubmit = ( ) => {
-        console.log('FFFFFFFFFFFIIIILE', File[0])
+        console.log('FFFFFFFFFFFIIIILE', File)
         
         const payload = new FormData();
         payload.append("name", "fileName");
@@ -67,7 +72,7 @@ function App() {
     //   body: payload
     // })
 
-    Axios.post("http://localhost:3003/files", payload)
+    Axios.post("http://localhost:3003/files", File)
     .then(res => console.log('axois', res))
     .catch(err => console.log(err));
     
