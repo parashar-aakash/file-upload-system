@@ -2,7 +2,7 @@ import "./App.css";
 import { useState } from "react";
 import { parse } from 'papaparse';
 import Axios from "axios";
-import { useEffect } from "react";
+import ReportingList from './ReportingList';
 
 function App() {
   const [ File, setFile ] = useState([]);
@@ -18,6 +18,7 @@ function App() {
     const arrayOfSomething = [];
     const arrayOfFilesUploaded = Object.values(event.target.files);
     const arrayOfCsvFiles = arrayOfFilesUploaded.filter( ( file ) => file.type === 'text/csv')
+    const productCount = 0;
     arrayOfCsvFiles.forEach(async (file) => {
 
       const { name } = file;
@@ -39,21 +40,11 @@ function App() {
       headers: { 'Content-Type': 'application/json' },
       body:  {title : 'result'}
     };
-    // fetch(
-    //   "http://localhost:3001/files", requestOptions)
-    //   .then((res) => console.log('response', res.json()))
-      // .then((json) => {
-        //     this.setState({
-          //         items: json,
-          //         DataisLoaded: true
-          //     });
-          
-          
-          
         }
         
    onsubmit = ( ) => {
-        console.log('FFFFFFFFFFFIIIILE', File)
+     const productCount = File.length
+        console.log('FFFFFFFFFFFIIIILE', productCount)
         
         const payload = new FormData();
         payload.append("name", "fileName");
@@ -65,16 +56,11 @@ function App() {
       body:  payload
     };
     const url = "https://httpbin.org/anything";
-    // Axios({
-    //   method:'POST',
-    //   url:url,
-    //   headers: { 'ContentType': 'multipart/form-data' },
-    //   body: payload
-    // })
-
-    Axios.post("http://localhost:3003/files", File)
-    .then(res => console.log('axois', res))
-    .catch(err => console.log(err));
+    if( productCount < 500000 ){
+      Axios.post("http://localhost:3003/files", File)
+      .then(res => console.log('axois', res))
+      .catch(err => console.log(err));
+    }
     
    }
 
@@ -85,6 +71,7 @@ function App() {
         <button type="button" class="btn btn-dark" onClick={ () => onsubmit() }>
           Upload
         </button>
+        <ReportingList />
       </header>
     </div>
   );
